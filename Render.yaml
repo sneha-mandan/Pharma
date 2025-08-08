@@ -8,7 +8,7 @@ services:
 
     repo: https://github.com/sneha-mandan/Pharma
 
-    rootDir: backend/OnlinePharmacyApplication
+    rootDir: https://github.com/sneha-mandan/Pharma
 
     dockerfilePath: Dockerfile
 
