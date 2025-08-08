@@ -1,0 +1,55 @@
+package com.excelR.OnlinePharmacyApplication.service;
+
+import com.excelR.OnlinePharmacyApplication.entity.*;
+import com.excelR.OnlinePharmacyApplication.repository.*;
+import com.excelR.OnlinePharmacyApplication.exception.DrugNotFoundException;
+import com.excelR.OnlinePharmacyApplication.exception.GlobalExceptionHandler.DrugOutOfStockException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import java.util.List;
+
+@Service
+public class OrderService {
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private DrugRepository drugRepository;
+
+    @Autowired
+    private CartService cartService;
+
+    public Order placeOrder(Order order) {
+        double total = 0;
+        for (OrderItem item : order.getItems()) {
+            Drug drug = drugRepository.findById(item.getDrug().getId())
+                    .orElseThrow(() -> new DrugNotFoundException("Drug not found with id: " + item.getDrug().getId()));
+
+            if (drug.getQuantity() == 0) {
+                throw new DrugOutOfStockException("Drug '" + drug.getName() + "' is out of stock.");
+            }
+
+            if (item.getQuantity() > drug.getQuantity()) {
+                throw new DrugOutOfStockException("Requested quantity for '" + drug.getName() +
+                        "' exceeds available stock (" + drug.getQuantity() + ").");
+            }
+
+            drug.setQuantity(drug.getQuantity() - item.getQuantity());
+            item.setPrice(drug.getPrice() * item.getQuantity());
+            total += item.getPrice();
+            drugRepository.save(drug);
+        }
+
+        order.setTotalPrice(total);
+        Order savedOrder = orderRepository.save(order);
+
+        cartService.clearCartByUserId(order.getUser().getId());
+        return savedOrder;
+    }
+
+    public List<Order> getOrdersByUser(Long userId) {
+        return orderRepository.findByUserId(userId);
+    }
+}

@@ -1,0 +1,252 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f5f7fa;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.ohx-home-link {
+  background-color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 600;
+  border: 1px solid #007bff;
+  transition: 0.3s;
+}
+
+.ohx-home-link:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.ohx-order-history-container {
+  width: 100%;
+  max-width: 1000px;
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  margin: 20px;
+}
+
+.ohx-header {
+  background: linear-gradient(135deg, #3a7bd5, #00d2ff);
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+.ohx-header h1 {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.ohx-order-list {
+  padding: 20px;
+}
+
+.ohx-order-card {
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  margin-bottom: 15px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  border-left: 4px solid #3a7bd5;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ohx-order-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.ohx-order-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.ohx-order-id {
+  font-weight: 600;
+  color: #3a7bd5;
+}
+
+.ohx-order-date {
+  color: #666;
+  font-size: 14px;
+}
+
+.ohx-order-status {
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ohx-status-delivered {
+  background-color: #e0f7e0;
+  color: #2e7d32;
+}
+
+.ohx-status-pending {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.ohx-status-cancelled {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.ohx-order-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.ohx-product-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.ohx-product-image {
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  object-fit: cover;
+  margin-right: 15px;
+}
+
+.ohx-product-name {
+  font-weight: 500;
+  margin-bottom: 5px;
+}
+
+.ohx-product-info {
+  flex: 1;
+}
+
+.ohx-product-quantity {
+  color: #666;
+  font-size: 14px;
+}
+
+.ohx-product-price {
+  font-weight: 600;
+  color: #333;
+}
+
+.ohx-order-total {
+  font-weight: 600;
+  text-align: right;
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.ohx-action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 15px;
+}
+
+.ohx-btn {
+  padding: 8px 15px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.ohx-btn-reorder {
+  background-color: #3a7bd5;
+  color: white;
+}
+
+.ohx-btn-reorder:hover {
+  background-color: #2a6bc4;
+}
+
+.ohx-btn-details {
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.ohx-btn-details:hover {
+  background-color: #e0e0e0;
+}
+
+.ohx-empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+}
+
+.ohx-empty-state img {
+  width: 150px;
+  opacity: 0.7;
+  margin-bottom: 20px;
+}
+
+.ohx-filter-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ohx-search-box,
+.ohx-filter-select {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 13px;
+  width: calc(50% - 10px);
+  height: 36px;
+}
+
+@media (max-width: 768px) {
+  .ohx-filter-controls {
+    flex-direction: column;
+  }
+
+  .ohx-search-box {
+    width: 100%;
+  }
+
+  .ohx-header h1 {
+    font-size: 20px;
+  }
+
+  .ohx-order-details {
+    flex-direction: column;
+  }
+
+  .ohx-product-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .ohx-product-image {
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+}

@@ -1,0 +1,69 @@
+package com.excelR.OnlinePharmacyApplication.exception;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import io.jsonwebtoken.SignatureException;
+
+@ControllerAdvice
+public class GlobalExceptionHandler {
+
+    public static class DrugOutOfStockException extends RuntimeException {
+        public DrugOutOfStockException(String message) {
+            super(message);
+        }
+    }
+
+    @ExceptionHandler(SignatureException.class)
+    public ResponseEntity<String> handleSignatureException(SignatureException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("❌ Invalid JWT Signature: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<String> handleBadCredentials(BadCredentialsException ex) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body("Invalid username or password.");
+    }
+
+    @ExceptionHandler(DisabledException.class)
+    public ResponseEntity<String> handleDisabledUser(DisabledException ex) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body(ex.getMessage());
+    }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleAllOtherExceptions(Exception ex) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("Something went wrong. Please try again later.");
+    }
+
+    @ExceptionHandler(UserNotApprovedException.class)
+    public ResponseEntity<String> handleUserNotApproved(UserNotApprovedException ex) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
+                .body("🚫 " + ex.getMessage());
+    }
+
+    @ExceptionHandler(DrugNotFoundException.class)
+    public ResponseEntity<String> handleDrugNotFound(DrugNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body("🧪 Drug Not Found: " + ex.getMessage());
+    }
+
+    @ExceptionHandler(DrugOutOfStockException.class)
+    public ResponseEntity<String> handleDrugOutOfStock(DrugOutOfStockException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("🛑 Order Error: " + ex.getMessage());
+    }
+}

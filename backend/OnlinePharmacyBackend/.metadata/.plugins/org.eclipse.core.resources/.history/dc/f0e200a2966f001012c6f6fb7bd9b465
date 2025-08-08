@@ -1,0 +1,59 @@
+package com.excelR.OnlinePharmacyApplication.service.impl;
+
+import com.excelR.OnlinePharmacyApplication.dto.MemberDto;
+import com.excelR.OnlinePharmacyApplication.dto.MemberUpdateRequest;
+import com.excelR.OnlinePharmacyApplication.entity.User;
+import com.excelR.OnlinePharmacyApplication.dao.UserRepository;
+import com.excelR.OnlinePharmacyApplication.service.MemberService;
+
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class MemberServiceImpl implements MemberService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    /**
+     * Fetch member profile using username
+     */
+    @Override
+    public MemberDto getMemberProfile(String username) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        MemberDto dto = new MemberDto();
+        dto.setUsername(user.getUsername());
+        dto.setEmail(user.getEmail());
+        dto.setPhone(user.getPhone());
+        dto.setAddress(user.getAddress());
+        return dto;
+    }
+
+    /**
+     * Update member profile with fields from MemberUpdateRequest
+     */
+    @Override
+    public void updateMemberProfile(String username, @Valid MemberUpdateRequest updateRequest) {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("User not found");
+        }
+
+        if (updateRequest.getEmail() != null) {
+            user.setEmail(updateRequest.getEmail());
+        }
+        if (updateRequest.getPhone() != null) {
+            user.setPhone(updateRequest.getPhone());
+        }
+        if (updateRequest.getAddress() != null) {
+            user.setAddress(updateRequest.getAddress());
+        }
+
+        userRepository.save(user);
+    }
+}

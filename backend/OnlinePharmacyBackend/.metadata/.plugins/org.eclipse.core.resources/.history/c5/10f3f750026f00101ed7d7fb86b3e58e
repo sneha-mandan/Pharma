@@ -1,0 +1,30 @@
+package com.excelR.OnlinePharmacyApplication.service;
+
+import com.excelR.OnlinePharmacyApplication.entity.Cart;
+import com.excelR.OnlinePharmacyApplication.repository.CartRepository;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CartService {
+
+    @Autowired
+    private CartRepository cartRepository;
+
+    public void clearCartByUserId(Long userId) {
+        cartRepository.deleteByUserId(userId);
+    }
+
+	public void addToCart(Cart cart) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public List<Cart> getCartByUserId(Long userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}

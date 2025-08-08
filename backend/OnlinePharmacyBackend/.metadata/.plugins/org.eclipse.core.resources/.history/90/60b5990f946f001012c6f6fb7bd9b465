@@ -1,0 +1,81 @@
+package com.excelR.OnlinePharmacyApplication.service;
+
+import com.excelR.OnlinePharmacyApplication.dto.OrderResponseDto;
+import com.excelR.OnlinePharmacyApplication.dto.UserDto;
+import com.excelR.OnlinePharmacyApplication.entity.*;
+import com.excelR.OnlinePharmacyApplication.repository.*;
+import com.excelR.OnlinePharmacyApplication.exception.DrugNotFoundException;
+import com.excelR.OnlinePharmacyApplication.exception.GlobalExceptionHandler.DrugOutOfStockException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class OrderService {
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Autowired
+    private DrugRepository drugRepository;
+
+    @Autowired
+    private CartService cartService;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public OrderResponseDto placeOrder(Order order) {
+        User user = userRepository.findById(order.getUser().getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        order.setUser(user);
+
+        double total = 0;
+        for (OrderItem item : order.getItems()) {
+            Drug drug = drugRepository.findById(item.getDrug().getId())
+                    .orElseThrow(() -> new DrugNotFoundException("Drug not found with id: " + item.getDrug().getId()));
+
+            item.setDrug(drug);
+
+            if (drug.getQuantity() == 0) {
+                throw new DrugOutOfStockException("Drug '" + drug.getName() + "' is out of stock.");
+            }
+
+            if (item.getQuantity() > drug.getQuantity()) {
+                throw new DrugOutOfStockException("Requested quantity for '" + drug.getName() +
+                        "' exceeds available stock (" + drug.getQuantity() + ").");
+            }
+
+            drug.setQuantity(drug.getQuantity() - item.getQuantity());
+            item.setPrice(drug.getPrice() * item.getQuantity());
+            total += item.getPrice();
+            drugRepository.save(drug);
+        }
+
+        order.setTotalPrice(total);
+        Order savedOrder = orderRepository.save(order);
+
+        cartService.clearCartByUserId(order.getUser().getId());
+
+        // Build and return DTO
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setUsername(user.getUsername());
+        userDto.setEmail(user.getEmail());
+
+        OrderResponseDto response = new OrderResponseDto();
+        response.setId(savedOrder.getId());
+        response.setUser(userDto);
+        response.setTotalPrice(savedOrder.getTotalPrice());
+        response.setOrderDate(savedOrder.getOrderDate());
+        response.setItems(savedOrder.getItems());
+
+        return response;
+    }
+
+    public List<Order> getOrdersByUser(Long userId) {
+        return orderRepository.findByUserId(userId);
+    }
+}

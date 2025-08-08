@@ -1,0 +1,52 @@
+package com.excelR.OnlinePharmacyApplication.service;
+
+import com.excelR.OnlinePharmacyApplication.config.JwtUtil;
+import com.excelR.OnlinePharmacyApplication.dto.LoginRequest;
+import com.excelR.OnlinePharmacyApplication.dto.UserUpdateRequest;
+import com.excelR.OnlinePharmacyApplication.entity.User;
+import com.excelR.OnlinePharmacyApplication.exception.CustomExceptions.UserNotApprovedException;
+import com.excelR.OnlinePharmacyApplication.repository.UserRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserAccessService {
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JwtUtil jwtUtil;
+
+    public String login(LoginRequest loginRequest) {
+        User user = userRepository.findByUsername(loginRequest.getUsername());
+        if (user == null || !passwordEncoder.matches(loginRequest.getPassword(), user.getPassword())) {
+            throw new RuntimeException("Invalid credentials");
+        }
+
+        if (!user.isApproved()) {
+            throw new UserNotApprovedException("User " + user.getUsername() + " is not approved yet");
+        }
+
+        return jwtUtil.generateToken(user.getUsername()); // ✔ This should end the login method
+    }
+
+    public User updateUserDetails(Long id, UserUpdateRequest updateRequest) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.setEmail(updateRequest.getEmail());
+        user.setMobile(updateRequest.getMobile());
+
+        if (updateRequest.getPassword() != null && !((String) updateRequest.getPassword()).isBlank()) {
+            user.setPassword(passwordEncoder.encode(updateRequest.getPassword()));
+        }
+
+        return userRepository.save(user); // ✔ Only return after all updates are done
+    }
+}

@@ -1,0 +1,77 @@
+package com.excelR.OnlinePharmacyApplication.controller;
+
+import com.excelR.OnlinePharmacyApplication.dto.LoginRequest;
+import com.excelR.OnlinePharmacyApplication.dto.UserUpdateRequest;
+import com.excelR.OnlinePharmacyApplication.entity.User;
+import com.excelR.OnlinePharmacyApplication.exception.UserNotApprovedException;
+import com.excelR.OnlinePharmacyApplication.service.UserDetailsServiceImpl;
+import com.excelR.OnlinePharmacyApplication.service.UserService;
+
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/users")
+public class UserController {
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private UserDetailsServiceImpl userDetailsServiceImpl;
+
+    @PutMapping("/update")
+    public User updateProfile(@RequestBody User user) {
+        return userService.registerUser(user);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) {
+        try {
+            String token = userDetailsServiceImpl.login(loginRequest);
+            User user = userService.getUserByUsername(loginRequest.getUsername());
+
+            String jsonResponse = String.format(
+                "{\"username\":\"%s\", \"role\":\"%s\", \"token\":\"%s\"}",
+                user.getUsername(),
+                user.getRole(),
+                token
+            );
+
+            return ResponseEntity.ok().body(jsonResponse);
+        } catch (UserNotApprovedException ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User not approved. Please wait for admin approval.");
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Login failed: " + ex.getMessage());
+        }
+    }
+
+
+    @GetMapping("/profile")
+    public ResponseEntity<?> getUserProfile(@AuthenticationPrincipal UserDetails userDetails) {
+        if (userDetails == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized or missing token");
+        }
+
+        String username = userDetails.getUsername();
+        User user = userService.getUserByUsername(username);
+        return ResponseEntity.ok(user);
+    }
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<String> updateMemberDetails(@AuthenticationPrincipal UserDetails currentUser,
+                                                      @PathVariable Long id,
+                                                      @RequestBody UserUpdateRequest request) {
+        try {
+            String response = userDetailsServiceImpl.updateUserDetails(id, request, currentUser.getUsername());
+            return ResponseEntity.ok(response);
+        } catch (Exception ex) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Update failed: " + ex.getMessage());
+        }
+    }
+}

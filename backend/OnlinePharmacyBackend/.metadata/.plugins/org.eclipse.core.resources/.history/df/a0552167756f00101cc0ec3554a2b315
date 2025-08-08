@@ -1,0 +1,5 @@
+package com.excelR.OnlinePharmacyApplication.dto;
+
+public class UserDto {
+
+}

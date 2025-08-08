@@ -1,0 +1,48 @@
+package com.excelR.OnlinePharmacyApplication.service;
+
+import com.excelR.OnlinePharmacyApplication.entity.Cart;
+import com.excelR.OnlinePharmacyApplication.entity.Drug;
+import com.excelR.OnlinePharmacyApplication.entity.User;
+import com.excelR.OnlinePharmacyApplication.repository.CartRepository;
+import com.excelR.OnlinePharmacyApplication.repository.DrugRepository;
+import com.excelR.OnlinePharmacyApplication.repository.UserRepository;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CartService {
+
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private UserRepository userRepository;  // 👉 Added
+
+    @Autowired
+    private DrugRepository drugRepository;  // 👉 Added
+
+    public void clearCartByUserId(Long userId) {
+        cartRepository.deleteByUserId(userId);
+    }
+
+    public void addToCart(Cart cart) {
+        // 👉 Fetch drug and user entities
+        Drug drug = drugRepository.findById(cart.getDrug().getId()).orElseThrow(() -> new RuntimeException("Drug not found"));
+        User user = userRepository.findById(cart.getUser().getId()).orElseThrow(() -> new RuntimeException("User not found"));
+
+        cart.setDrug(drug);
+        cart.setUser(user);
+        cart.setQuantity(cart.getQuantity());
+
+        System.out.println("Saving cart for user: " + user.getUsername() + " and drug: " + drug.getName());
+        cartRepository.save(cart);  // ✅ Persist to DB
+    }
+
+    public List<Cart> getCartByUserId(Long userId) {
+        // 👉 Placeholder for actual fetch logic, implement this if needed
+        return cartRepository.findAll();  // Or implement custom query by userId
+    }
+}

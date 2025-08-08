@@ -1,0 +1,5 @@
+package com.excelR.OnlinePharmacyApplication.config;
+
+public class JwtAuthenticateFilter {
+
+}

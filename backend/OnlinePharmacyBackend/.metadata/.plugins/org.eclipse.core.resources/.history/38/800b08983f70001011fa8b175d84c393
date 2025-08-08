@@ -1,0 +1,29 @@
+package com.excelR.OnlinePharmacyApplication.controller;
+
+import com.excelR.OnlinePharmacyApplication.dto.CartRequestDto;
+import com.excelR.OnlinePharmacyApplication.entity.Cart;
+import com.excelR.OnlinePharmacyApplication.service.CartService;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/cart")
+public class CartController {
+
+    @Autowired
+    private CartService cartService;
+
+    @PostMapping
+    public String addToCart(@RequestBody CartRequestDto dto) {
+        cartService.addToCart(dto);
+        return "Item added to cart";
+    }
+
+    @GetMapping("/user/{userId}")
+    public List<Cart> getCartByUser(@PathVariable Long userId) {
+        return cartService.getCartByUserId(userId);
+    }
+}

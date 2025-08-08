@@ -1,0 +1,51 @@
+package com.excelR.OnlinePharmacyApplication.service;
+
+import com.excelR.OnlinePharmacyApplication.dto.CartRequestDTO;
+import com.excelR.OnlinePharmacyApplication.entity.Cart;
+import com.excelR.OnlinePharmacyApplication.entity.Drug;
+import com.excelR.OnlinePharmacyApplication.entity.User;
+import com.excelR.OnlinePharmacyApplication.repository.CartRepository;
+import com.excelR.OnlinePharmacyApplication.repository.DrugRepository;
+import com.excelR.OnlinePharmacyApplication.repository.UserRepository;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CartService {
+
+    @Autowired
+    private CartRepository cartRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private DrugRepository drugRepository;
+
+    public void clearCartByUserId(Long userId) {
+        cartRepository.deleteByUserId(userId);
+    }
+
+    public void addToCart(CartRequestDTO dto) {
+        Drug drug = drugRepository.findById(dto.getDrugId())
+            .orElseThrow(() -> new RuntimeException("Drug not found"));
+
+        User user = userRepository.findById(dto.getUserId())
+            .orElseThrow(() -> new RuntimeException("User not found"));
+
+        Cart cart = new Cart();
+        cart.setUser(user);
+        cart.setDrug(drug);
+        cart.setQuantity(dto.getQuantity());
+
+        System.out.println("Saving cart for user: " + user.getUsername() + " and drug: " + drug.getName());
+        cartRepository.save(cart);
+    }
+
+    public List<Cart> getCartByUserId(Long userId) {
+        return cartRepository.findByUserId(userId);
+    }
+}

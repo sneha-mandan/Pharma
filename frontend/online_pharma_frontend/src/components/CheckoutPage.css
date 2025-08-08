@@ -1,0 +1,403 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8fafc;
+  color: #1e293b;
+  margin: 0;
+  padding: 0;
+}
+
+.pharmacheckout-page {
+  min-height: 100vh;
+}
+
+.pharmacheckout-header {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pharmacheckout-header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
+
+.pharmacheckout-header-left {
+  display: flex;
+  align-items: center;
+}
+
+
+.pharmacheckout-badge {
+  background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  color: #fff;
+}
+
+.pharmacheckout-site-title {
+  font-size: 1.8rem;
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.pharmacheckout-header-right {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pharmacheckout-lock-icon {
+  width: 32px;
+  height: 32px;
+  background-color: #dbeafe;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #3b82f6;
+}
+
+.pharmacheckout-progress {
+  position: relative;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pharmacheckout-progress-bg {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background-color: #e2e8f0;
+  z-index: 0;
+  transform: translateY(-50%);
+}
+
+.pharmacheckout-progress-fill {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  background-color: #3b82f6;
+  width: 66%;
+  z-index: 1;
+  transform: translateY(-50%);
+}
+
+.pharmacheckout-progress-step {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pharmacheckout-step-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #dbeafe;
+  color: #3b82f6;
+}
+
+.pharmacheckout-step-icon.active {
+  background-color: #3b82f6;
+  color: #fff;
+}
+
+.pharmacheckout-step-icon.current {
+  background-color: #dbeafe;
+  color: #3b82f6;
+}
+
+.pharmacheckout-main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+@media (min-width: 992px) {
+  .pharmacheckout-main-content {
+    flex-direction: row;
+  }
+  .pharmacheckout-order-section {
+    width: 60%;
+  }
+  .pharmacheckout-summary-section {
+    width: 40%;
+    position: sticky;
+    top: 1rem;
+  }
+}
+
+.pharmacheckout-card {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.pharmacheckout-item-card {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  transition: 0.3s ease;
+  align-items: flex-start;
+}
+
+.pharmacheckout-item-card:hover {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  transform: translateY(-2px);
+}
+
+.pharmacheckout-item-image {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 0.5rem;
+}
+
+.pharmacheckout-item-info {
+  flex: 1;
+}
+
+.pharmacheckout-item-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 500;
+}
+
+.pharmacheckout-item-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+}
+
+.pharmacheckout-quantity-control {
+  display: flex;
+  align-items: center;
+  border: 1px solid #e2e8f0;
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.pharmacheckout-quantity-control button {
+  padding: 0.25rem 0.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #475569;
+}
+
+.pharmacheckout-quantity-control span {
+  padding: 0 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.pharmacheckout-remove-btn {
+  background: none;
+  border: none;
+  color: #f87171;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.pharmacheckout-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.pharmacheckout-form-row > div {
+  flex: 1 1 100%;
+}
+
+input,
+select {
+  width: 90%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  font-family: inherit;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.pharmacheckout-payment-option {
+  display: flex;
+  align-items: center;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  justify-content: space-between;
+}
+
+.pharmacheckout-payment-option.selected {
+  border-color: #3b82f6;
+}
+
+.pharmacheckout-secure-payment {
+  background-color: #eff6ff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+}
+
+.pharmacheckout-secure-payment h3 {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.pharmacheckout-secure-payment p {
+  font-size: 0.85rem;
+  color: #475569;
+}
+
+.pharmacheckout-badges {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.75rem;
+}
+
+.pharmacheckout-summary-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.pharmacheckout-coupon-row {
+  display: flex;
+  margin: 1rem 0;
+}
+
+.pharmacheckout-coupon-input {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #cbd5e1;
+  border-right: none;
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.pharmacheckout-apply-btn {
+  padding: 0.5rem 1rem;
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 0 0.5rem 0.5rem 0;
+  cursor: pointer;
+}
+
+.pharmacheckout-total-row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+.pharmacheckout-total-amount {
+  color: #3b82f6;
+}
+
+.pharmacheckout-checkout-btn {
+  background: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+  color: white;
+  font-weight: 600;
+  border: none;
+  width: 100%;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.pharmacheckout-checkout-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+}
+
+.pharmacheckout-terms {
+  font-size: 0.75rem;
+  text-align: center;
+  color: #64748b;
+  margin-top: 1rem;
+}
+
+.pharmacheckout-terms a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.pharmacheckout-support {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  text-align: center;
+}
+
+.pharmacheckout-support a {
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.pharmacheckout-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@media (min-width: 576px) {
+  .pharmacheckout-form-row > div {
+    flex: 1 1 48%;
+  }
+}
+
+.pharmacheckout-form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.pharmacheckout-half-width {
+  flex: 0 0 48%;
+}  
+.pharmacheckout-form-group.full-width {
+  flex: 1 1 100%;
+}     
